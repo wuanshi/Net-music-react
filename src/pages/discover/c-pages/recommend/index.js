@@ -1,30 +1,28 @@
-import React, { memo, useEffect } from 'react';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { getTopBannerAction } from './store/actionCreators';
+import React, { memo } from 'react';
 
+import { RecommendWrapper,RecommendLeft, RecommendRight } from './style'
+
+import HotBanner from './top-banner'
+import HotRecommend from './hot-recommend';
+import NewAblum from './new-ablum'
 function Recommend() {
-  // const recommend = useSelector(state => ({
-  //   topBanners:state.recommend.topBanners
-  // }))
 
-  // redux hooks 使用 
-  // shallowEqual 作用是进行浅层比较 -> 非依赖改变数据组件 不进行重新渲染
-  // hooks 缺陷
-  const { topBanners } = useSelector(state => ({
-    topBanners: state.recommend.get('topBanners')
-  }), shallowEqual)
-
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(getTopBannerAction())
-  }, [dispatch])
-
-  console.log('topBanners', topBanners);
+ 
   return (
-    <div>
-      <h2>Recommend</h2>
-    </div>
+    <RecommendWrapper>
+      <HotBanner />
+      <div className="content wrap-v2">
+        <RecommendLeft>
+          <HotRecommend />
+          <NewAblum />
+        </RecommendLeft>
+        <RecommendRight>
+          eee
+        </RecommendRight>
+      </div>
+
+
+    </RecommendWrapper>
   );
 
 }
