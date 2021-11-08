@@ -5,6 +5,7 @@ import { RecommendWrapper,RecommendLeft, RecommendRight } from './style'
 import HotBanner from './top-banner'
 import HotRecommend from './hot-recommend';
 import NewAblum from './new-ablum'
+import RecommendRanking from './recommend-ranking'
 function Recommend() {
 
  
@@ -15,6 +16,7 @@ function Recommend() {
         <RecommendLeft>
           <HotRecommend />
           <NewAblum />
+          <RecommendRanking />
         </RecommendLeft>
         <RecommendRight>
           eee
