@@ -1,0 +1,1 @@
+export const CHANG_CURRENT_SONG = "player/CHANG_CURRENT_SONG"

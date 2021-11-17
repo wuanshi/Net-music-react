@@ -38,7 +38,7 @@ export const PlayBarWrapper = styled.div`
         width: 36px;
         height: 36px;
         margin-right: 8px;
-
+        background-position: 0 -164px;
       }
 
       .next {

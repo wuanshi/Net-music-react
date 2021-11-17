@@ -22,7 +22,7 @@ function NewAblum() {
     dispatch(getNewAblumAction(10))
   }, [dispatch])
 
-  console.log("newAblums", newAblums);
+  // console.log("newAblums", newAblums);
   return (
     <NewAblumWrapper>
       <ThemeHeaderRCM title="新碟上架" target="/discover/album" />

@@ -5,7 +5,7 @@ import { TopRankingWrapper } from './style'
 
 export default memo(function index(props) {
   const { info } = props
-  console.log(info);
+  // console.log(info);
   return (
     <TopRankingWrapper>
       <div className="header">

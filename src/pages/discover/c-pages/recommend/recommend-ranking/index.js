@@ -23,7 +23,7 @@ function Ranking() {
     dispatch(getTopListAction(3));
   }, [dispatch])
 
-  console.log(upRanking);
+  // console.log(upRanking);
   return (
     <div>
       <ThemeHeaderRCM title="榜单" target="/discover/ranking" />
