@@ -50,4 +50,11 @@ export const AblumCoverWrapper = styled.a.attrs(props => ({
     background-position: 0 -86px;
   }
   
+  .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp: 2;
+  }
 `

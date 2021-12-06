@@ -1,1 +1,5 @@
 export const CHANG_CURRENT_SONG = "player/CHANG_CURRENT_SONG"
+
+export const CHANG_CURRENT_SONG_INDEX = "player/CHANG_CURRENT_SONG_AND_INDEX"
+
+export const CHANG_PLAY_LIST = "player/CHANG_PLAY_LIST"

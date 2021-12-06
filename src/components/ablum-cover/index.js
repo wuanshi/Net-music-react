@@ -11,7 +11,7 @@ function AblumCover(props) {
         <div className="sprite_covor bg-cover"></div>
         <div className="sprite_icon play"></div>
       </div>
-      <a href="/#">{info.name}</a>
+      <a href="/#" className="title">{info.name}</a>
       <p>{info.artist.name}</p>
     </AblumCoverWrapper>
   )

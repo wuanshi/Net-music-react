@@ -1,7 +1,8 @@
 import React, { memo, useState, useEffect, useCallback, useRef } from 'react'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
-import { getSongDetailAction } from '../store/actionCreators'
+import { getSongDetailAction, changeCurrentSongAndIndexAction } from '../store/actionCreators'
+import { getPlaySong } from '@/utils/format-utils'
 import { formatMinuteSecond } from '@/utils/format'
 
 import { Slider } from 'antd';
@@ -10,41 +11,73 @@ import { PlayBarWrapper } from './style'
 export default memo(function PlayerBar(props) {
 
   const [isPlaying, setIsPlaying] = useState(false)
-  const [currentTime,setCurrentTime] = useState(0)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [isChangeing, setIsChangeing] = useState(false)
   const audioRef = useRef();
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getSongDetailAction(1888864257))
-  },[dispatch])
+  const { currentSong } = useSelector(state => ({
+    currentSong: state.player.get('currentSong'),
+  }), shallowEqual)
 
-  const { duration } = useSelector(state => ({
-    duration:state.player.get('currentSong').dt
-  }),shallowEqual)
+  const duration = currentSong?.dt || 0;
+  const songName = currentSong?.name;
+  const songerName = currentSong.ar && currentSong.ar[0].name
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // 应为 dispatch 不会变化，所以只有第一次执行
+    console.log('dispatch');
+    dispatch(getSongDetailAction(167876))
+  }, [dispatch])
+
+  useEffect(() => {
+    audioRef.current.src = getPlaySong(currentSong.id)
+    audioRef.current.play().then(() => {
+      setIsPlaying(true)
+    }).catch(() => {
+      setIsPlaying(false)
+    })
+  },[currentSong])
+
 
   const playMusic = useCallback(() => {
-    audioRef.current.src = "https://music.163.com/song/media/outer/url?id=1888864257.mp3";
     isPlaying ? audioRef.current.pause() : audioRef.current.play();
     setIsPlaying(!isPlaying)
   }, [isPlaying])
 
   const updateTime = (e) => {
-    setCurrentTime(e.target.currentTime)
-    // console.log(e.target.currentTime);
+    isChangeing || setCurrentTime(e.target.currentTime)
   }
 
   const handleDrag = (e) => {
     let time = e / 100 * duration / 1000
+    setIsChangeing(true)
     setCurrentTime(time)
-    audioRef.current.currentTime = time
+  }
+
+  const handlePlayTime = useCallback(() => {
+    audioRef.current.currentTime = currentTime
+    setIsChangeing(false)
+    if(!isPlaying) {
+      playMusic()
+    }
+  },[isPlaying,playMusic,currentTime])
+
+  const changeCurrentSongIndex = (tag) => {
+    dispatch(changeCurrentSongAndIndexAction(tag))
+  }
+
+  const handleMusicEnd = () => {
+    dispatch(changeCurrentSongAndIndexAction(1))
   }
   return (
     <PlayBarWrapper className="sprite_player">
       <div className="content wrap-v2">
         <div className="left-control">
-          <div className="prev btn sprite_player"></div>
-          <div className={ isPlaying ? "sprite_player play" : "sprite_player pause"} onClick={playMusic}></div>
-          <div className="next btn sprite_player"></div>
+          <div className="prev btn sprite_player" onClick={() => changeCurrentSongIndex(-1)}></div>
+          <div className={isPlaying ? "sprite_player play" : "sprite_player pause"} onClick={() => playMusic()}></div>
+          <div className="next btn sprite_player" onClick={() => changeCurrentSongIndex(1)}></div>
         </div>
         <div className="progress">
           <div className="image">
@@ -53,12 +86,12 @@ export default memo(function PlayerBar(props) {
           </div>
           <div className="info">
             <div className="song">
-              <span className="song-name">{"周五了周五了"}</span>
-              <a href="/#">{"朱星驰"}</a>
+              <span className="song-name">{songName}</span>
+              <a href="/#">{songerName}</a>
             </div>
             <div className="slide-bar">
               <div className="slider">
-                <Slider value={currentTime * 1000 / duration * 100} onChange={(e) => {handleDrag(e)}}/>
+                <Slider value={currentTime * 1000 / duration * 100} onChange={(e) => { handleDrag(e) }} onAfterChange={handlePlayTime} />
               </div>
               <span className="current">{formatMinuteSecond(currentTime * 1000)}</span>
               <span className="middle">/</span>
@@ -70,7 +103,7 @@ export default memo(function PlayerBar(props) {
 
         </div>
       </div>
-      <audio ref={audioRef} onTimeUpdate={e => {updateTime(e)}} />
+      <audio ref={audioRef} onTimeUpdate={e => { updateTime(e) }} onEnded={handleMusicEnd}/>
     </PlayBarWrapper>
   )
 })

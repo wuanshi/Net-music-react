@@ -1,11 +1,22 @@
 import React, { memo } from 'react'
+import { useDispatch } from 'react-redux'
 
+import { getSongDetailAction } from '@/pages/player/store/actionCreators.js'
 
 import { TopRankingWrapper } from './style'
 
-export default memo(function index(props) {
+export default memo(function TopRanking(props) {
   const { info } = props
-  // console.log(info);
+
+  const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   dispatch(getSongDetailAction(id))
+  // },[id])
+
+  const PlayMusic = (id) => {
+    dispatch(getSongDetailAction(id))
+  }
   return (
     <TopRankingWrapper>
       <div className="header">
@@ -30,7 +41,7 @@ export default memo(function index(props) {
                 <div className="info">
                   <span className="item-name text-nowrap">{item.name}</span>
                   <div className="oper">
-                    <div className="player sprite_02"></div>
+                    <div className="player sprite_02" onClick={() => PlayMusic(item.id)}></div>
                     <div className="add sprite_icon2"></div>
                     <div className="collect sprite_02"></div>
                   </div>
