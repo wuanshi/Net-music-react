@@ -3,6 +3,7 @@ import React from 'react'
 import { AblumCoverWrapper } from './style'
 
 function AblumCover(props) {
+  
   const { info } = props
   return (
     <AblumCoverWrapper id={info.id}>
